@@ -17,7 +17,3 @@ def time_in_minutes(hours: str) -> int: #returnerar max timmar i minuter
 #med hjälp av loopar
 
 #printa ut 3-5 filmer efter sorteringen
-
-val = ["drama", "comedy"]
-import pyinputplus  as pyip
-svar = pyip.inputMenu(val, prompt=  "Whatcha want?" )
