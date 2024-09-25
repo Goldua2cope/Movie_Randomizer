@@ -1,10 +1,25 @@
-#importera allt som behövs
+import pandas as pd
 import pyinputplus as pyip
-import csv
+import csv 
 
+file_path = 'movies.csv'  
+movies_df = pd.read_csv(file_path)
+
+class Movie:
+    def __init__(self, title, year, genre, duration, director):
+        self.title = title
+        self.year = year
+        self.genre = genre
+        self.duration = duration
+        self.director = director
+
+def matches_criteria(self, time_limit, genre, year, director):
+    #här lägger vi in hur användarens inputs matchar med filmerna med if else
+
+    
 #skapa alla inputs användaren kommer svara på
 
-tid = pyip.inputMenu(choices = ['1-2 h', '2-3 h'], prompt= 'How much time do you have?\n', numbered=True)
+tid = pyip.inputMenu(choices = ['1-2 h', '2-3 h', 'Does not matter'], prompt= 'How much time do you have?\n', numbered=True)
 
 regissörer_set = set() #behövde en lista som inte innehåller samma direktör två eller flera gånger (https://www.digitalocean.com/community/tutorials/python-remove-duplicates-from-list)
 
