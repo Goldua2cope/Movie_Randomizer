@@ -21,6 +21,8 @@ def matches_criteria(self, time_limit, genre, year, director):
 
 tid = pyip.inputMenu(choices = ['1-2 h', '2-3 h', 'Does not matter'], prompt= 'How much time do you have?\n', numbered=True)
 
+år=pyip.inputMenu(choices = ['older', 'newer', 'Does not matter'], prompt= 'You wanna see an older or newer movie?\n', numbered=True)
+
 regissörer_set = set() #behövde en lista som inte innehåller samma direktör två eller flera gånger (https://www.digitalocean.com/community/tutorials/python-remove-duplicates-from-list)
 
 with open(file='movies.csv', mode='r' ) as file:
