@@ -5,7 +5,7 @@ import csv
 file_path = 'movies.csv'  
 movies_df = pd.read_csv(file_path)
 
- class Movie:
+class Movie:
      def __init__(self, title, year, genre, duration, director):
          self.title = title
          self.year = year
@@ -47,9 +47,9 @@ with open(file='movies.csv', mode='r', encoding='utf-8') as file:
     for row in reader: #kapitel16
         director_set.add(row['director']) # vill lägga director till regissörer_set
 
-regissör_list = sorted(list(director_set)) #sorted för att listan presenteras fint till användaren 
+director_list = sorted(list(director_set)) #sorted för att listan presenteras fint till användaren 
 
-director_choice = pyip.inputMenu(choices=regissör_list, prompt= 'Do you have any favorite director? \n', numbered=True)
+director_choice = pyip.inputMenu(choices=director_list, prompt= 'Do you have any favorite director? \n', numbered=True)
 
 ### Data extraction from csv file according to user inputs 
 desired_genre = 'Drama' #
@@ -61,14 +61,20 @@ filtered_movies = movies_df[
     (movies_df['duration'] <= desired_duration) 
 ]
 
-# prints the first 5 movies (This needs to be randomized!)
-if not filtered_movies.empty:
+# Saves 5 random samples from filtered_movies in a new variable
+random_movies = filtered_movies.sample(n=5, replace = False)
+
+# prints the first 5 movies
+if not random_movies.empty:
     print("Movies matching your criteria:\n")
-    for index, row in filtered_movies.iterrows():
+    num : int = 1
+    for index, row in random_movies.iterrows():
+        print('%s'.center(10, '=') %(num))
         print(f"Title: {row['original_title']}")
         print(f"Genre: {row['genre']}")
         print(f"Duration: {row['duration']} minutes")
         print(f"Year: {row['year']}")
         print(f"Director: {row['director']}\n")
+        num += 1
 else:
     print("No movies found matching your criteria.")
