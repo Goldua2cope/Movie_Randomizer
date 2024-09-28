@@ -34,9 +34,9 @@ with open(file='movies.csv', mode='r', encoding='utf-8') as file:
     for row in reader: #kapitel16
         director_set.add(row['director']) # vill lägga director till regissörer_set
 
-regissör_list = sorted(list(regissörer_set)) #sorted för att listan presenteras fint till användaren 
+director_list = sorted(list(director_set)) #sorted för att listan presenteras fint till användaren 
 
-director_choice = pyip.inputMenu(choices=regissör_list, prompt= 'Do you have any favorite director? \n', numbered=True)
+director_choice = pyip.inputMenu(choices=director_list, prompt= 'Do you have any favorite director? \n', numbered=True)
 
 ### Data extraction from csv file according to user inputs 
 desired_genre = 'Drama' #
