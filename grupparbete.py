@@ -2,60 +2,125 @@ import pandas as pd
 import pyinputplus as pyip
 import csv 
 
-file_path = 'movies.csv'  
-movies_df = pd.read_csv(file_path)
+file_path : str = 'movies.csv'
+
+# Class for users movie criteria:
+class Movies_Criteria:
+    def __init__(self, duration = None, genre = None, year = None, director = None) -> None:
+        self.duration : int = duration
+        self.genre : str = genre
+        self.year_preference : int = year
+        self.director : str = director
+
+    def __str__(self) -> str:
+        return f'''Current Criteria: 
+                    Duration: Up to{self.duration} minutes.
+                    Genre: {self.genre}.
+                    Year: {self.year_preference}.
+                    Director: {self.director}'''
     
-### All input statements (and relevent functions)
+    # Method for userinput and storing in class attributes 
+    def setting_user_preference(self) -> None:
 
-#Input time
-time_choice = pyip.inputMenu(choices = ['1-2 h', '2-3 h', 'Does not matter'], prompt= 'How much time do you have?\n', numbered=True)
+        self.duration = pyip.inputMenu(choices = ['1-2 h', '2-3 h', 'Does not matter'], 
+                                       prompt= 'How much time do you have?\n', 
+                                       numbered=True,
+                                       postValidateApplyFunc = self.hours_to_minutes)
+        #self.genre = 
 
-#Converting max hours to minutes
-def time_in_minutes(hours: str) -> int:
-    match hours:
-        case '1-2 h':
-            return 120
-        case '2-3 h':
-            return 180
-        case 'Does not matter':
-            return 200
-        case _:
-            raise ValueError('ValueError!')
-
-#Input years preference
-year_choice =pyip.inputMenu(choices = ['Older than 2000', 'Newer than 2000', 'Does not matter'], prompt= 'You wanna see an older or newer movie?\n', numbered=True)
-
-#Input director preference
-director_set = set() #behövde en lista som inte innehåller samma direktör två eller flera gånger (https://www.digitalocean.com/community/tutorials/python-remove-duplicates-from-list)
-
-with open(file='movies.csv', mode='r', encoding='utf-8') as file:
-    reader = csv.DictReader(file) # csv.DictReader(exampleFile)(kapitel16) eftersom movies.csv har titel i första rådet(tex original_title osv)
+        self.year_preference = pyip.inputMenu(choices = ['Older than 2000', 'Newer than 2000', 'Does not matter'], 
+                                              prompt= 'You wanna see an older or newer movie?\n', 
+                                              numbered=True)
+        
+        self.director = pyip.inputMenu(choices = self.get_all_directors(file_path), 
+                                       prompt = 'Do you have any favorite director? \n', 
+                                       numbered = True)
     
-    for row in reader: #kapitel16
-        director_set.add(row['director']) # vill lägga director till regissörer_set
+    # Static methods to convert max hours to minutes
+    @staticmethod 
+    def hours_to_minutes(hours : str) -> int:
+        match hours:
+            case '1-2 h':
+                return 120
+            case '2-3 h':
+                return 180
+            case 'Does not matter':
+                return 200 #Value that will cover all durations
+            case _:
+                raise ValueError('ValueError!') #In case a non-str is passed
+    
+    # Static method to extract all directors from CSV file in orderly maner
+    @staticmethod
+    def get_all_directors(file_path : str) -> list:
+        director_set = set()
+        with open(file = file_path, mode='r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            
+            for row in reader: 
+                director_set.add(row['director']) 
 
-director_list = sorted(list(director_set)) #sorted för att listan presenteras fint till användaren 
+        return sorted(list(director_set))
 
-director_choice = pyip.inputMenu(choices=director_list, prompt= 'Do you have any favorite director? \n', numbered=True)
+# Class for handling movie filtering and randomisation
+class Movies_Finder:
+    def __init__(self, file_path, Movies_Criteria) -> None:
+        self.movies_df = pd.read_csv(file_path) # CSV file to Data frame via pandas
+        self.instance_criteria = Movies_Criteria # 'pass by object reference' of users preferences
 
-### Data extraction from csv file according to user inputs 
-desired_genre = 'Drama' #
-desired_duration = time_in_minutes(time_choice)
+    def __str__(self) -> str:
+        return f'We are working with a data frame based on {file_path}'
+    
+    # Method for filtering movies based on users movie criteria, 
+    # returns new data frame
+    def Movies_filter(self):
+        return self.movies_df[
+            (self.movies_df['genre'].str.contains(self.instance_criteria.genre, case=False, na=False)) & 
+            (self.movies_df['duration'] <= self.instance_criteria.duration) &
+            (self.movies_df['director'] == self.instance_criteria.director)
+        ]
+    
+    # Method to sample out 5 or less random objects from Movies_filter(), 
+    # returns new data frame
+    def Movies_Randomizer(self):
+        try:
+            # Sample out 5 movies if there are 5 or more movies
+            return self.Movies_filter().sample(n = 5, replace = False)
+        except ValueError:
+            # empty data frame or data frame with all matches
+            return self.Movies_filter()
 
-# Data frame that contains matched objects
-filtered_movies = movies_df[
-    (movies_df['genre'].str.contains(desired_genre, case=False, na=False)) & 
-    (movies_df['duration'] <= desired_duration) 
-]
+    # Method to present the result
+    def Movies_Presentation(self) -> None:
 
-# prints the first 5 movies (This needs to be randomized!)
-if not filtered_movies.empty:
-    print("Movies matching your criteria:\n")
-    for index, row in filtered_movies.iterrows():
-        print(f"Title: {row['original_title']}")
-        print(f"Genre: {row['genre']}")
-        print(f"Duration: {row['duration']} minutes")
-        print(f"Year: {row['year']}")
-        print(f"Director: {row['director']}\n")
-else:
-    print("No movies found matching your criteria.")
+        # Randomizes the filtered data frame
+        Movies_Matches = self.Movies_Randomizer()
+
+        # Counter for numbering the matches
+        Counter = 1
+
+        # Loops through and prints out result in pretty format if data frame is not empty
+        if not Movies_Matches.empty:
+            print("Movies matching your criteria: \n")
+            for index, row in Movies_Matches.iterrows():
+                print('%s'.center(10, '=') %(Counter))
+                print(f"Title: {row['original_title']}")
+                print(f"Genre: {row['genre']}")
+                print(f"Duration: {row['duration']} minutes")
+                print(f"Year: {row['year']}")
+                print(f"Director: {row['director']}\n")
+            Counter += 1 # Increases num with each iteration
+        else:
+            print("No movies found matching your criteria.")
+
+# Main function for execution
+def main() -> None:
+
+    # Initializing user preferences
+    User_Preferences = Movies_Criteria('user', genre = 'drama')
+    Movies_Criteria.setting_user_preference(User_Preferences)
+
+    # Filtration, randomisation and display
+    Movie_List = Movies_Finder('movies.csv', User_Preferences)
+    Movies_Finder.Movies_Presentation(Movie_List)
+
+main()
