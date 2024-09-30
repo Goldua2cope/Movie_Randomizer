@@ -54,11 +54,11 @@ class Movies:
         self.director : str = director
 
     def __str__(self) -> str :   
-        return f'''Title: {self.original_title}\n
-                   Year: {self.year}\n
-                   Genre: {self.genre}\n
-                   Duration: {self.duration} minutes.\n
-                   Director: {self.director}'''
+        return (f"Title: {self.original_title}\n"
+                f"Year: {self.year}\n"
+                f"Genre: {self.genre}\n"
+                f"Duration: {self.duration} minutes\n"
+                f"Director: {self.director}\n")
     
 # en class som filtrerar movies och använder df
 class Movies_Filter:
@@ -117,13 +117,15 @@ class Movie_program:
         if not filtered_df.empty:
             num_movies = min(3, len(filtered_df))  
             selected_movies = filtered_df.sample(n=num_movies) #.sample # pandas metod som väljer random ett råd från df  # om jag vill flera random movies får skriva sample(n=2 eller flera
-            for index, movie in selected_movies.iterrows():
-                print(f"Movies matching your criteria: \n")
-                print(f"Title: {movie['original_title']}")
-                print(f"Year: {movie['year']}")
-                print(f"Genre: {movie['genre']}")
-                print(f"Duration: {movie['duration']} minutes")
-                print(f"Director: {movie['director']}")
+            for index, movie_row in selected_movies.iterrows():
+                movie = Movies(
+                    original_title=movie_row['original_title'], 
+                    year=movie_row['year'], 
+                    genre=movie_row['genre'], 
+                    duration=movie_row['duration'], 
+                    director=movie_row['director']
+               )
+                print(f"Movies matching your criteria:\n{movie}")
         else:
             print("Cannot find a film for you today.")
             lucky_choice = pyip.inputYesNo(prompt='Feel you lucky today? (yes/no)\n')
@@ -133,7 +135,7 @@ class Movie_program:
                 selected_movies = self.df.sample(n=num_movies)
 
                 
-                for index, movie in selected_movies.iterrows():
+                for index, movie_row in selected_movies.iterrows():
                     print(f"\nTitle: {movie['original_title']}")
                     print(f"Year: {movie['year']}")
                     print(f"Genre: {movie['genre']}")
