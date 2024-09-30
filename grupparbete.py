@@ -15,6 +15,9 @@ genre_list.append('Does not matter') #lägga till slutet av listan elementet 'Do
 
 #kolumnen director får också ha en list som innehåller en director bara en gång
 director_list: list = sorted(df['director'].unique().tolist())  #unique() samma som set() #.tolist() omvandlar unique till lista #pandas metoder
+
+###director_set = set(df['director']) #samma som ovanpå men istället för pandas unique() använder set direct till kolumn df['director']
+####director_list = sorted(list(director_set))
 director_list.append('Does not matter') #lägga till slutet av listan elementet 'Does not matter'
 
 
@@ -29,11 +32,11 @@ def time_in_minutes(hours: str) -> int:
             return 200  
         case _:
             raise ValueError('Invalid value!')
-#time_limit: int = time_in_minutes(time_choice)
 
 #en def som funkar som Jings men för året nu som returnerar två integers t ex år 0 och år 1999       
-def year_filter(year_choice: str) -> tuple[int, int]: #två integers först är det minsta och andra den största
-    match year_choice:
+# ändrade parameter years_choice  till years för att inte vara samma med argument när jag anropar funktionen
+def year_filter(years: str) -> tuple[int, int]: #två integers först är det minsta och andra den största
+    match years:
         case 'Older than 2000':
             return (0, 1999) #year_range[0] = 0 och year_range[1] = 1999
         case 'Newer than 2000':
@@ -42,7 +45,6 @@ def year_filter(year_choice: str) -> tuple[int, int]: #två integers först är 
             return (0, 2025)  
         case _:
             raise ValueError('Invalid value!')
-#year_range = year_filter(year_choice)
 
 # en class för movies 
 class Movies:
@@ -53,7 +55,7 @@ class Movies:
         self.duration : int = duration
         self.director : str = director
 
-    def __str__(self) -> str :   
+    def __str__(self) -> str :   #strukurer #hur kommer filmer att skrivas ut
         return (f"Title: {self.original_title}\n"
                 f"Year: {self.year}\n"
                 f"Genre: {self.genre}\n"
@@ -62,20 +64,24 @@ class Movies:
     
 # en class som filtrerar movies och använder df
 class Movies_Filter:
-    def __init__(self,df):
+    def __init__(self,df):  #df är df = pd.read_csv('movies.csv') alltså alla filmer från filen
         self.df = df
-
+    
+    ##första def filtrerar df som innehåller alla filmer
     def filter_duration(self, time_limit):
         return self.df[self.df['duration'] <= time_limit] #df i kolumnen duration mindre eller lika med time_limit # return True(alltså alla movies som har duration <= time_limit) #om duration är storre  False
+    #  self.df = df definieras efter return  och blir en ny df med filtrerade movies
     
-    
+    # andra def filtrerar nya df som uppstår efter varje def 
+    # därför skriver jag df[(df['year'] ... och inte self.df som första råden
     def filter_year(self,df,year_range):
         return df[(df['year'] >= year_range[0]) & (df['year'] <= year_range[1])] #& liknar med AND # båda får vara True
     
     def filter_genre(self,df,genre_choice):
         if genre_choice != 'Does not matter':  #om genre_choice == False fortsätter programmet till nästa kriteria
             return df[df['genre'].str.contains(genre_choice, case=False, na=False)]   #.str.contains(pandas metod) för att råd i kolumnen genre innehåller flera variabler t ex Drama, Action
-        return df
+        return df          # returnerar df som filtrerades av föregående def
+
     
     def filter_director(self,df,director_choice):
         if director_choice != 'Does not matter': 
@@ -88,28 +94,30 @@ class Movies_Filter:
 class Movie_program:
     def __init__(self,df):
         self.df = df
-        self.movies_filter = Movies_Filter(df)
+        self.movies_filter = Movies_Filter(df) #jag skapar attributet inne i klasset# innehåller def metoder från Movies_Filter #filtrerar inputs och ger möjligheten att använda def från det klasset(i slutet av det här klasset)
     
     def main_program_runs(self):
-        
+        #ändrade inputs namn för att de inte ha samma namn med metoder från class Movies_Filter
+        #de kan ändå ha samma namn för att de inte tillhör i samma scop men ville undika förvirring
         #jings input
         time_choice = pyip.inputMenu(choices=['1-2 h', '2-3 h', 'Does not matter'], 
                              prompt='How much time do you have?\n', numbered=True)
-        time_limit = time_in_minutes(time_choice)
+        time_limit_input = time_in_minutes(time_choice)
         
-        genre_choice = pyip.inputMenu(choices=genre_list, prompt='Which genre do you prefer?\n', numbered=True)
+        genre_choice_input = pyip.inputMenu(choices=genre_list, prompt='Which genre do you prefer?\n', numbered=True)
+        
         # nathalies input och jag har lagt till en variable som anropar def funktionen
         year_choice = pyip.inputMenu(choices=['Older than 2000', 'Newer than 2000', 'Does not matter'],
                              prompt='You wanna see an older or newer movie?\n', numbered=True)
-        year_range = year_filter(year_choice)
+        year_range_input = year_filter(year_choice)
         # my input
-        director_choice = pyip.inputMenu(choices=director_list, prompt='Do you have any favorite director?\n', numbered=True)
+        director_choice_input = pyip.inputMenu(choices=director_list, prompt='Do you have any favorite director?\n', numbered=True)
 
         # funktioner - metoder från klass Movies_Filter anropas här och får som argument inputs 
-        filtered_df = self.movies_filter.filter_duration(time_limit)
-        filtered_df = self.movies_filter.filter_year(filtered_df, year_range)
-        filtered_df = self.movies_filter.filter_genre(filtered_df, genre_choice)
-        filtered_df = self.movies_filter.filter_director(filtered_df,director_choice)
+        filtered_df = self.movies_filter.filter_duration(time_limit_input)
+        filtered_df = self.movies_filter.filter_year(filtered_df, year_range_input)
+        filtered_df = self.movies_filter.filter_genre(filtered_df, genre_choice_input)
+        filtered_df = self.movies_filter.filter_director(filtered_df,director_choice_input)
 
         # fick hjälp från jings kod här
         # kollar om df är tömt eller inte
