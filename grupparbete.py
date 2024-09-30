@@ -117,7 +117,7 @@ class Movie_program:
         if not filtered_df.empty:
             num_movies = min(3, len(filtered_df))  
             selected_movies = filtered_df.sample(n=num_movies) #.sample # pandas metod som väljer random ett råd från df  # om jag vill flera random movies får skriva sample(n=2 eller flera
-            for idx, movie in selected_movies.iterrows():
+            for index, movie in selected_movies.iterrows():
                 print(f"Movies matching your criteria: \n")
                 print(f"Title: {movie['original_title']}")
                 print(f"Year: {movie['year']}")
