@@ -79,7 +79,7 @@ class Movie_program:
             
     # Method to create a list of all genres
     @staticmethod
-    def make_genre_list():
+    def make_genre_list() -> list:
         genres: set = set() 
         for genre_list in df['genre']: 
             for genre in genre_list.split(', '): 
@@ -90,7 +90,7 @@ class Movie_program:
     
     # Method to create a list with all directors
     @staticmethod
-    def make_director_list():
+    def make_director_list() -> list:
         director_list: list = sorted(df['director'].unique().tolist())
         director_list.append('Does not matter') 
         return director_list
