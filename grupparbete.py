@@ -117,9 +117,9 @@ class Movie_program:
 
         # Filtering data frame based on user preference
         filtered_df : pd.DataFrame = self.movies_filter.filter_duration(time_choice)
-        filtered_df : pd.DataFrame = self.movies_filter.filter_year(filtered_df, year_choice)
-        filtered_df : pd.DataFrame = self.movies_filter.filter_genre(filtered_df, genre_choice_input)
-        filtered_df : pd.DataFrame = self.movies_filter.filter_director(filtered_df,director_choice)
+        filtered_df = self.movies_filter.filter_year(filtered_df, year_choice)
+        filtered_df = self.movies_filter.filter_genre(filtered_df, genre_choice_input)
+        filtered_df = self.movies_filter.filter_director(filtered_df,director_choice)
 
         # Display 3 random movies based on the filtered data frame
         if not filtered_df.empty:
