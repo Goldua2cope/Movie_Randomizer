@@ -150,6 +150,22 @@ class Movie_program:
             else:
                 print("Thank you!")
 
+# Prints a nice introduction to the program
+def print_slow(str):
+    for letter in str:
+        sys.stdout.write(letter)
+        sys.stdout.flush()
+        time.sleep(0.05)
+
+print_slow("Hello! Welcome to my movie randomizer")
+input("")
+print_slow ("You probably having trouble choosing a movie today.. ")
+input("")
+print_slow("don't worry I'll help you! ")
+input("")
+print_slow ("")
+input("")
+
 # Main function
 def main():
     program = Movie_program(df)
