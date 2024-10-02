@@ -113,13 +113,13 @@ class Movie_program:
                              numbered=True,
                              postValidateApplyFunc = self.year_filter)
     
-        director_choice_input = pyip.inputMenu(choices = self.make_director_list(), prompt='Do you have any favorite director?\n', numbered=True)
+        director_choice = pyip.inputMenu(choices = self.make_director_list(), prompt='Do you have any favorite director?\n', numbered=True)
 
         # Filtering data frame based on user preference
         filtered_df = self.movies_filter.filter_duration(time_choice)
         filtered_df = self.movies_filter.filter_year(filtered_df, year_choice)
         filtered_df = self.movies_filter.filter_genre(filtered_df, genre_choice_input)
-        filtered_df = self.movies_filter.filter_director(filtered_df,director_choice_input)
+        filtered_df = self.movies_filter.filter_director(filtered_df,director_choice)
 
         # Display 3 random movies based on the filtered data frame
         if not filtered_df.empty:
