@@ -1,5 +1,7 @@
 import pandas as pd
 import pyinputplus as pyip
+import sys
+import time
 
 # Data frame stored in variable 'df'
 df = pd.read_csv('movies.csv') 
