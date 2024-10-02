@@ -8,9 +8,9 @@ df = pd.read_csv('movies.csv')
 
 # Class for movies
 class Movies:
-    def __init__(self, original_title= None ,year = None, genre = None,duration = None, director = None) -> None:
+    def __init__(self, original_title = None ,year = None, genre = None, duration = None, director = None) -> None:
         # Initiate attributes for a movie object 
-        self.original_title: str= original_title 
+        self.original_title: str = original_title 
         self.year : int = year
         self.genre : str = genre
         self.duration : int = duration
@@ -26,22 +26,22 @@ class Movies:
 # Class that filters movies from 'df'
 class Movies_Filter:
     # Initiate data frame
-    def __init__(self, df): 
+    def __init__(self, df: pd.DataFrame): 
         self.df = df
     
     # methods for filtering data frame according to user input, return new data frames
-    def filter_duration(self, time_limit : int):
+    def filter_duration(self, time_limit : int) -> pd.DataFrame:
         return self.df[self.df['duration'] <= time_limit] 
     
-    def filter_year(self,df, year_range : tuple):
+    def filter_year(self,df, year_range : tuple) -> pd.DataFrame:
         return df[(df['year'] >= year_range[0]) & (df['year'] <= year_range[1])] 
     
-    def filter_genre(self, df , genre_choice : str):
+    def filter_genre(self, df , genre_choice : str) -> pd.DataFrame:
         if genre_choice != 'Does not matter': 
             return df[df['genre'].str.contains(genre_choice, case=False, na=False)]  
         return df 
     
-    def filter_director(self, df, director_choice : str):
+    def filter_director(self, df, director_choice : str) -> pd.DataFrame:
         if director_choice != 'Does not matter': 
              return df[df['director'] == director_choice]
         return df
@@ -49,7 +49,7 @@ class Movies_Filter:
 # Class for filtering, randomize and display movies from data frame
 class Movie_program:
     # Initiate data frame and Movies_Filter object as attribute
-    def __init__(self, df):
+    def __init__(self, df: pd.DataFrame):
         self.df = df
         self.movies_filter = Movies_Filter(df) 
     
@@ -155,16 +155,16 @@ class Movie_program:
                 print("Thank you!")
 
 # Prints a nice introduction to the program
-def print_slow(str : str) -> None:
-    for letter in str:
+def print_slow(text : str) -> None:
+    for letter in text:
         sys.stdout.write(letter)
         sys.stdout.flush()
         time.sleep(0.05)
 
 print_slow("Hello! Welcome to my movie randomizer.\n")
 print_slow("You probably having trouble choosing a movie today..\n")
-print_slow("don't worry I'll help you!\n ")
-print_slow ("")
+print_slow("Don't worry I'll help you!\n ")
+print_slow("")
 
 # Main function
 def main():
