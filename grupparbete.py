@@ -62,7 +62,7 @@ class Movie_program:
             case 'Does not matter':
                 return 200  
             case _:
-                raise ValueError('Invalid value!')
+                raise ValueError('Invalid value!') # Handles Value error if for some reason not a str is passed
         
     # Method to convert year preference to tuple
     @staticmethod
@@ -75,7 +75,7 @@ class Movie_program:
             case 'Does not matter':
                 return (0, 2025)  
             case _:
-                raise ValueError('Invalid value!')
+                raise ValueError('Invalid value!') # Handles Value error if for some reason not a str is passed
             
     # Method to create a list of all genres
     @staticmethod
