@@ -98,6 +98,7 @@ class Movie_program:
     # Method containing the main program logic 
     def main_program_runs(self) -> None:
         # Prompting for User preference
+        # pyip.inputXX handels ValueErrors and prompts user until a valid input is given
         time_choice = pyip.inputMenu(choices=['1-2 h', '2-3 h', 'Does not matter'], 
                              prompt='How much time do you have?\n',
                              numbered=True,
@@ -135,6 +136,7 @@ class Movie_program:
             print("Cannot find a film for you today.")
             
             # Extra option in case no matches are found, prints 3 random movies of all movies
+            # pyip.inputYesNo handels ValueErrors and prompts user until a valid input is given
             lucky_choice = pyip.inputYesNo(prompt='Would you like to watch a random Movie of our choice? (yes/no)\n')
 
             if lucky_choice == 'yes':
@@ -151,7 +153,7 @@ class Movie_program:
                 print("Thank you!")
 
 # Prints a nice introduction to the program
-def print_slow(str):
+def print_slow(str : str) -> :
     for letter in str:
         sys.stdout.write(letter)
         sys.stdout.flush()
