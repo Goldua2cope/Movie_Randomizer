@@ -161,14 +161,10 @@ def print_slow(str : str) -> :
         sys.stdout.flush()
         time.sleep(0.05)
 
-print_slow("Hello! Welcome to my movie randomizer")
-input("")
-print_slow ("You probably having trouble choosing a movie today.. ")
-input("")
-print_slow("don't worry I'll help you! ")
-input("")
+print_slow("Hello! Welcome to my movie randomizer.\n")
+print_slow("You probably having trouble choosing a movie today..\n")
+print_slow("don't worry I'll help you!\n ")
 print_slow ("")
-input("")
 
 # Main function
 def main():
