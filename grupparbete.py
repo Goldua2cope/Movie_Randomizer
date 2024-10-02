@@ -155,7 +155,7 @@ class Movie_program:
                 print("Thank you!")
 
 # Prints a nice introduction to the program
-def print_slow(str : str) -> :
+def print_slow(str : str) -> None:
     for letter in str:
         sys.stdout.write(letter)
         sys.stdout.flush()
